@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttWithdrawProveHis">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttWithdrawProveHisVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="userPwd" property="userPwd" jdbcType="VARCHAR" />
+		<result column="userPwdCount" property="userPwdCount" jdbcType="VARCHAR" />
+		<result column="channel" property="channel" jdbcType="VARCHAR" />
+		<result column="deviceName" property="deviceName" jdbcType="VARCHAR" />
+		<result column="deviceNameCount" property="deviceNameCount" jdbcType="VARCHAR" />
+		<result column="wechatNickname" property="wechatNickname" jdbcType="VARCHAR" />
+		<result column="registerIp" property="registerIp" jdbcType="VARCHAR" />
+		<result column="registerIpCount" property="registerIpCount" jdbcType="VARCHAR" />
+		<result column="ownPhoneNum" property="ownPhoneNum" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="ipCount" property="ipCount" jdbcType="VARCHAR" />
+		<result column="alipayAccount" property="alipayAccount" jdbcType="VARCHAR" />
+		<result column="coordinate" property="coordinate" jdbcType="VARCHAR" />
+		<result column="coordinateCount" property="coordinateCount" jdbcType="VARCHAR" />
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="location" property="location" jdbcType="VARCHAR" />
+		<result column="locationCount" property="locationCount" jdbcType="VARCHAR" />
+		<result column="registerDate" property="registerDate" jdbcType="VARCHAR" />
+		<result column="wifiMac" property="wifiMac" jdbcType="VARCHAR" />
+		<result column="wifiMacCount" property="wifiMacCount" jdbcType="VARCHAR" />
+		<result column="accountStatus" property="accountStatus" jdbcType="INTEGER" />
+		<result column="installedListMdCode" property="installedListMdCode" jdbcType="VARCHAR" />
+		<result column="installedListMdCodeCount" property="installedListMdCodeCount" jdbcType="VARCHAR" />
+		<result column="isCheatedApp" property="isCheatedApp" jdbcType="INTEGER" />
+		<result column="masterPhoneNum" property="masterPhoneNum" jdbcType="VARCHAR" />
+		<result column="students" property="students" jdbcType="INTEGER" />
+		<result column="proveResult" property="proveResult" jdbcType="INTEGER" />
+		<result column="proveDesc" property="proveDesc" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		
+		
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_withdraw_prove_user.id,
+		htt_withdraw_prove_user.phoneNum,
+		htt_withdraw_prove_user.userPwd, 
+		htt_withdraw_prove_user.userPwdCount,
+		htt_withdraw_prove_user.channel,
+		htt_withdraw_prove_user.deviceName,
+		htt_withdraw_prove_user.deviceNameCount,
+		htt_withdraw_prove_user.wechatNickname,
+		htt_withdraw_prove_user.registerIp,
+		htt_withdraw_prove_user.registerIpCount,
+		htt_withdraw_prove_user.ownPhoneNum,
+		htt_withdraw_prove_user.ip,
+		htt_withdraw_prove_user.ipCount,
+		htt_withdraw_prove_user.alipayAccount,
+		htt_withdraw_prove_user.coordinate,
+		htt_withdraw_prove_user.coordinateCount,
+		htt_withdraw_prove_user.imei,
+		htt_withdraw_prove_user.location,
+		htt_withdraw_prove_user.locationCount,
+		htt_withdraw_prove_user.registerDate,
+		htt_withdraw_prove_user.wifiMac,
+		htt_withdraw_prove_user.wifiMacCount,
+		htt_withdraw_prove_user.accountStatus,
+		htt_withdraw_prove_user.installedListMdCode,
+		htt_withdraw_prove_user.installedListMdCodeCount,
+		htt_withdraw_prove_user.isCheatedApp,
+		htt_withdraw_prove_user.masterPhoneNum,
+		htt_withdraw_prove_user.students,
+		htt_withdraw_prove_user.proveResult,
+		htt_withdraw_prove_user.proveDesc,
+		htt_withdraw_prove_user.createDate,
+		htt_withdraw_prove_user.createdBy,
+		htt_withdraw_prove_user.updateDate,
+		htt_withdraw_prove_user.updatedBy
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				proveResult=0
+				<if test="phoneNum != null and phoneNum != ''">and htt_withdraw_prove_user.phoneNum = #{phoneNum}</if>
+				<if test="startDate != null and startDate != ''">
+			    		 <![CDATA[
+			    			and createDate>=#{startDate} and createDate<=#{endDate}
+			    		]]>  
+			    </if>
+			    <if test="accountStatus != null and accountStatus != ''">and htt_withdraw_prove_user.accountStatus = #{accountStatus}</if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		select count(id) from htt_withdraw_prove_user
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_prove_user
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_withdraw_prove_user.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 查询id -->
+	<select id="selectIdList" resultType="java.lang.String" parameterType="java.util.Map">
+		select id
+		from htt_withdraw_prove_user
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_withdraw_prove_user.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID数组查询 -->
+	<select id="selectByIdList" resultMap="ResultMap" parameterType="java.util.List">
+	    select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_prove_user
+		where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		    #{item}
+		</foreach>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_prove_user
+		where id = #{id}
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.po.HttWithdrawHis">
+		update 
+			htt_withdraw_prove_user 
+		<set>
+			<if test="proveResult != null"> proveResult = #{proveResult}, </if>
+			<if test="proveDesc != null"> proveDesc = #{proveDesc}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			
+		</set>
+		where id = #{id} 
+	</update>
+	
+</mapper>

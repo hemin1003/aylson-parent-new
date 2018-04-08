@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttAppConfig">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttAppConfigVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="goldLimit" property="goldLimit" jdbcType="INTEGER" />
+		<result column="goldRange" property="goldRange" jdbcType="VARCHAR" />
+		<result column="timeDuration" property="timeDuration" jdbcType="INTEGER" />
+		<result column="timeGold" property="timeGold" jdbcType="INTEGER" />
+		<result column="videoGoldLimit" property="videoGoldLimit" jdbcType="INTEGER" />
+		<result column="videoGoldRange" property="videoGoldRange" jdbcType="VARCHAR" />
+		<result column="params" property="params" jdbcType="VARCHAR" />
+		<result column="readRuleDesc" property="readRuleDesc" jdbcType="VARCHAR" />
+		<result column="androidUrl" property="androidUrl" jdbcType="VARCHAR" />
+		<result column="iphoneUrl" property="iphoneUrl" jdbcType="VARCHAR" />
+		<result column="readAwardLimit" property="readAwardLimit" jdbcType="INTEGER" />
+		<result column="tyDownloadUrl" property="tyDownloadUrl" jdbcType="VARCHAR" />
+		<result column="readAwardRepeat" property="readAwardRepeat" jdbcType="INTEGER" />
+		<result column="videoAwardRepeat" property="videoAwardRepeat" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_app_config.id,
+		htt_app_config.goldLimit,
+		htt_app_config.goldRange,
+		htt_app_config.timeDuration,
+		htt_app_config.timeGold,
+		htt_app_config.videoGoldLimit,
+		htt_app_config.videoGoldRange,
+		htt_app_config.params,
+		htt_app_config.readRuleDesc,
+		htt_app_config.androidUrl,
+		htt_app_config.iphoneUrl,
+		htt_app_config.readAwardLimit,
+		htt_app_config.tyDownloadUrl,
+		htt_app_config.readAwardRepeat,
+		htt_app_config.videoAwardRepeat,
+		htt_app_config.createDate,
+		htt_app_config.createdBy,
+		htt_app_config.updateDate,
+		htt_app_config.updatedBy
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<!-- 模糊查询 -->
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_app_config
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_config
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_app_config.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_config
+		where id = #{id}
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.HttAppConfigVo">
+		update 
+			htt_app_config 
+		<set>
+			<if test="goldLimit != null"> goldLimit = #{goldLimit}, </if>
+			<if test="goldRange != null"> goldRange = #{goldRange}, </if>
+			<if test="timeDuration != null"> timeDuration = #{timeDuration}, </if>
+			<if test="timeGold != null"> timeGold = #{timeGold}, </if>
+			<if test="videoGoldLimit != null"> videoGoldLimit = #{videoGoldLimit}, </if>
+			<if test="videoGoldRange != null"> videoGoldRange = #{videoGoldRange}, </if>
+			<if test="params != null"> params = #{params}, </if>
+			<if test="readRuleDesc != null"> readRuleDesc = #{readRuleDesc}, </if>
+			<if test="androidUrl != null"> androidUrl = #{androidUrl}, </if>
+			<if test="iphoneUrl != null"> iphoneUrl = #{iphoneUrl}, </if>
+			<if test="readAwardLimit != null"> readAwardLimit = #{readAwardLimit}, </if>
+			<if test="tyDownloadUrl != null"> tyDownloadUrl = #{tyDownloadUrl}, </if>
+			<if test="readAwardRepeat != null"> readAwardRepeat = #{readAwardRepeat}, </if>
+			<if test="videoAwardRepeat != null"> videoAwardRepeat = #{videoAwardRepeat}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+		</set>
+		where id = #{id} 
+	</update>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttInviteUserHis">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttInviteUserHisVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="masterPhoneNum" property="masterPhoneNum" jdbcType="VARCHAR" />
+		<result column="studentPhoneNum" property="studentPhoneNum" jdbcType="VARCHAR" />
+		<result column="masterRegisterIp" property="masterRegisterIp" jdbcType="VARCHAR" />
+		<result column="studentRegisterIp" property="studentRegisterIp" jdbcType="VARCHAR" />
+		<result column="registerType" property="registerType" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="masterImei" property="masterImei" jdbcType="VARCHAR" />
+		<result column="studentImei" property="studentImei" jdbcType="VARCHAR" />
+		<result column="studentMsgCode" property="studentMsgCode" jdbcType="VARCHAR" />
+		<result column="studentsGold" property="studentsGold" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_inviteuser_his.id,
+		htt_inviteuser_his.masterPhoneNum,
+		htt_inviteuser_his.studentPhoneNum,
+		htt_inviteuser_his.masterRegisterIp,
+		htt_inviteuser_his.studentRegisterIp,
+		htt_inviteuser_his.registerType,
+		htt_inviteuser_his.createDate,
+		htt_inviteuser_his.createdBy,
+		htt_inviteuser_his.updateDate,
+		htt_inviteuser_his.updatedBy,
+		htt_inviteuser_his.masterImei,
+		htt_inviteuser_his.studentImei,
+		htt_inviteuser_his.studentMsgCode,
+		htt_inviteuser_his.studentsGold
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 精确查询 -->
+				<!-- <if test="masterRegisterIp != null">and htt_inviteuser_his.masterRegisterIp = #{masterRegisterIp}</if>
+				<if test="studentRegisterIp != null">and htt_inviteuser_his.studentRegisterIp = #{studentRegisterIp}</if> -->
+				<if test="masterRegisterIp != null and masterRegisterIp != ''"> and htt_inviteuser_his.masterRegisterIp = #{masterRegisterIp} </if>
+				<if test="studentRegisterIp != null and studentRegisterIp != ''"> and htt_inviteuser_his.studentRegisterIp = #{studentRegisterIp} </if>
+				<if test="masterPhoneNumLike != null and masterPhoneNumLike != ''"> and htt_inviteuser_his.masterPhoneNum = #{masterPhoneNumLike} </if>
+				<if test="studentPhoneNumLike != null and studentPhoneNumLike != ''"> and htt_inviteuser_his.studentPhoneNum = #{studentPhoneNumLike} </if>
+			    <if test="createDate != null and createDate != ''">
+			    		 <![CDATA[
+			    			and createDate>=#{createDate} and createDate<#{tomorrowDate}
+			    		]]>  
+			    </if>
+			    <if test="registerType != null and registerType != ''"> and htt_inviteuser_his.registerType = #{registerType} </if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_inviteuser_his
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_inviteuser_his
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_inviteuser_his.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_inviteuser_his
+		where id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.vo.HttInviteUserHisVo">
+		insert into htt_inviteuser_his
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > id, </if>
+		  <if test="masterPhoneNum != null" > masterPhoneNum, </if>
+		  <if test="studentPhoneNum != null" > studentPhoneNum, </if>
+		  <if test="createDate != null" > createDate, </if>
+		  <if test="createdBy != null" > createdBy, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > #{id}, </if>
+		  <if test="masterPhoneNum != null" > #{masterPhoneNum}, </if>
+		  <if test="studentPhoneNum != null" > #{studentPhoneNum}, </if>
+		  <if test="createDate != null" > #{createDate}, </if>
+		  <if test="createdBy != null" > #{createdBy}, </if>
+		  <if test="updateDate != null" > null, </if>
+        </trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.HttInviteUserHisVo">
+		update 
+			htt_inviteuser_his 
+		<set>
+			<if test="masterPhoneNum != null"> masterPhoneNum = #{masterPhoneNum}, </if>
+			<if test="studentPhoneNum != null"> studentPhoneNum = #{studentPhoneNum}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+		</set>
+		where id = #{id} 
+	</update>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from htt_inviteuser_his
+		where id = #{id}
+	</delete>
+	
+</mapper>

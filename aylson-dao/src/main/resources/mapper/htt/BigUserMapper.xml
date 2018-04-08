@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.BigUser">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.BigUserVo">
+		<id column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="sysUserId" property="sysUserId" jdbcType="VARCHAR" />
+		<result column="inviteCode" property="inviteCode" jdbcType="VARCHAR" />
+		<result column="inviteUrl" property="inviteUrl" jdbcType="VARCHAR" />
+		<result column="downloadUrl" property="downloadUrl" jdbcType="VARCHAR"/>
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="userDesc" property="userDesc" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_big_user.phoneNum,
+		htt_big_user.sysUserId,
+		htt_big_user.inviteCode, 
+		htt_big_user.inviteUrl,
+		htt_big_user.downloadUrl,
+		htt_big_user.createDate,
+		htt_big_user.createdBy,
+		htt_big_user.updateDate,
+		htt_big_user.updatedBy,
+		htt_big_user.userDesc
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<!-- 模糊查询 -->
+				<if test="phoneNumLike != null and phoneNumLike != ''"> and htt_big_user.phoneNum like CONCAT('%',#{phoneNumLike},'%') </if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(phoneNum) from htt_big_user
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_big_user
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_big_user.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_big_user
+		where phoneNum = #{phoneNum}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.vo.BigUserVo">
+		insert into htt_big_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="phoneNum != null" > phoneNum, </if>
+		  <if test="sysUserId != null" > sysUserId, </if>
+		  <if test="inviteCode != null" > inviteCode, </if>
+		  <if test="inviteUrl != null" > inviteUrl, </if>
+		  <if test="downloadUrl != null"> downloadUrl, </if>
+		  <if test="createDate != null" > createDate, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		  <if test="userDesc != null" > userDesc, </if>
+		  
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="phoneNum != null" > #{phoneNum}, </if>
+		  <if test="sysUserId != null" > #{sysUserId}, </if>
+		  <if test="inviteCode != null" > #{inviteCode}, </if>
+		  <if test="inviteUrl != null" > #{inviteUrl}, </if>
+		  <if test="downloadUrl != null"> #{downloadUrl},</if>
+		  <if test="createDate != null" > #{createDate}, </if>
+		  <if test="updateDate != null" > null, </if>
+		  <if test="userDesc != null" > #{userDesc}, </if>
+		  
+        </trim>
+	</insert>
+	
+	<!-- 添加 -->
+	<insert id="insertTimeHis" parameterType="java.util.Map">
+		insert into htt_time_his
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > id, </if>
+		  <if test="phoneNum != null" > phoneNum, </if>
+		  <if test="createDate != null" > createDate, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        	  <if test="id != null" > #{id}, </if>
+		  <if test="phoneNum != null" > #{phoneNum}, </if>
+		  <if test="createDate != null" > #{createDate}, </if>
+		  <if test="updateDate != null" > null, </if>
+        </trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.BigUserVo">
+		update 
+			htt_big_user 
+		<set>
+			<if test="sysUserId != null"> sysUserId = #{sysUserId}, </if>
+			<if test="inviteCode != null"> inviteCode = #{inviteCode}, </if>
+			<if test="inviteUrl != null"> inviteUrl = #{inviteUrl}, </if>
+			<if test="downloadUrl != null">downloadUrl = #{downloadUrl},</if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="userDesc != null"> userDesc = #{userDesc}, </if>
+		</set>
+		where phoneNum = #{phoneNum}
+	</update>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from htt_big_user
+		where phoneNum = #{phoneNum}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.ytt.po.SpiderInfo">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.ytt.vo.SpiderInfoVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="domain" property="domain" jdbcType="VARCHAR" />
+		<result column="domainName" property="domainName" jdbcType="VARCHAR" />
+		<result column="date" property="date" jdbcType="VARCHAR" />
+		<result column="newsNum" property="newsNum" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		ytt_spider_list.id,
+		ytt_spider_list.domain,
+		ytt_spider_list.domainName, 
+		ytt_spider_list.date, 
+		ytt_spider_list.newsNum, 
+		ytt_spider_list.createDate,
+		ytt_spider_list.createdBy,
+		ytt_spider_list.updateDate,
+		ytt_spider_list.updatedBy
+	</sql>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from ytt_spider_list where date=#{currentTime}
+	</select>
+	
+	<select id="selectDaysOfNewsNum" resultType="java.lang.Long" parameterType="java.util.Map">
+		select ifnull(sum(newsNum),0) as num from ytt_spider_list where date=#{currentTime}
+	</select>
+	
+	<select id="selectNewsNumOfTag" resultMap="ResultMap" parameterType="java.util.Map">
+		select * from ytt_spider_list where domain=#{domain} order by date desc limit #{limit}
+	</select>
+	
+	<select id="selectAllNewsNum" resultType="java.lang.Long" parameterType="java.util.Map">
+		select ifnull(sum(newsNum),0) as num from ytt_spider_list
+	</select>
+	
+</mapper>

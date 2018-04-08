@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttWithdrawProveUserLink">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttWithdrawProveUserLinkVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+        <result column="wechatNickname" property="wechatNickname" jdbcType="VARCHAR" />
+		<result column="ownPhoneNum" property="ownPhoneNum" jdbcType="VARCHAR" />
+		<result column="alipayAccount" property="alipayAccount" jdbcType="VARCHAR" />
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="registerDate" property="registerDate" jdbcType="VARCHAR" />
+		<result column="accountStatus" property="accountStatus" jdbcType="INTEGER" />
+		<result column="students" property="students" jdbcType="INTEGER" />
+		<result column="masterPhoneNum" property="masterPhoneNum" jdbcType="VARCHAR" />
+		<result column="isCheatedApp" property="isCheatedApp" jdbcType="INTEGER" />
+		<result column="deviceName" property="deviceName" jdbcType="VARCHAR" />
+		<result column="registerIp" property="registerIp" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="coordinate" property="coordinate" jdbcType="VARCHAR" />
+		<result column="location" property="location" jdbcType="VARCHAR" />
+		<result column="wifi" property="wifi" jdbcType="VARCHAR" />
+		<result column="installedList" property="installedList" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="project" property="project" jdbcType="VARCHAR" />
+		<result column="dataFlag" property="dataFlag" jdbcType="VARCHAR" />
+		
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_withdraw_prove_user_link.id,
+		htt_withdraw_prove_user_link.pid,
+		htt_withdraw_prove_user_link.phoneNum,
+		htt_withdraw_prove_user_link.wechatNickname, 
+		htt_withdraw_prove_user_link.ownPhoneNum,
+		htt_withdraw_prove_user_link.alipayAccount,
+		htt_withdraw_prove_user_link.imei,
+		htt_withdraw_prove_user_link.registerDate,
+		htt_withdraw_prove_user_link.accountStatus,
+		htt_withdraw_prove_user_link.students,
+		htt_withdraw_prove_user_link.masterPhoneNum,
+		htt_withdraw_prove_user_link.isCheatedApp,
+		htt_withdraw_prove_user_link.deviceName,
+		htt_withdraw_prove_user_link.registerIp,
+		htt_withdraw_prove_user_link.ip,
+		htt_withdraw_prove_user_link.coordinate,
+		htt_withdraw_prove_user_link.location,
+		htt_withdraw_prove_user_link.wifi,
+		htt_withdraw_prove_user_link.installedList,
+		htt_withdraw_prove_user_link.createDate,
+		htt_withdraw_prove_user_link.createdBy,
+		htt_withdraw_prove_user_link.updateDate,
+		htt_withdraw_prove_user_link.updatedBy,
+		htt_withdraw_prove_user_link.project,
+		htt_withdraw_prove_user_link.dataFlag
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<if test="phoneNum != null">and htt_withdraw_prove_user_link.phoneNum = #{phoneNum}</if>
+				<if test="pid != null">and htt_withdraw_prove_user_link.pid = #{pid}</if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_withdraw_prove_user_link
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_prove_user_link
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_withdraw_prove_user_link.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_prove_user_link
+		where id = #{id}
+	</select>
+		
+</mapper>

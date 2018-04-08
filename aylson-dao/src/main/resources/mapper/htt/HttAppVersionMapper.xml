@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttAppVersion">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttAppVersionVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="configName" property="configName" jdbcType="VARCHAR" />
+		<result column="configData" property="configData" jdbcType="VARCHAR" />
+		<result column="sourceData" property="sourceData" jdbcType="VARCHAR" />
+		<result column="channelRange" property="channelRange" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_app_version.id,
+		htt_app_version.configName,
+		htt_app_version.configData,
+		htt_app_version.sourceData,
+		htt_app_version.channelRange,
+		htt_app_version.createDate,
+		htt_app_version.createdBy,
+		htt_app_version.updateDate,
+		htt_app_version.updatedBy
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<!-- 模糊查询 -->
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_app_version
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_version
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_app_version.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_version
+		where id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.po.HttAppVersion">
+		insert into htt_app_version
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > id, </if>
+		  <if test="configName != null" > configName, </if>
+		  <if test="configData != null" > configData, </if>
+		  <if test="sourceData != null" > sourceData, </if>
+		  <if test="channelRange != null" > channelRange, </if>
+		  <if test="createDate != null" > createDate, </if>
+		  <if test="createdBy != null" > createdBy, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > #{id}, </if>
+		  <if test="configName != null" > #{configName}, </if>
+		  <if test="configData != null" > #{configData}, </if>
+		  <if test="sourceData != null" > #{sourceData}, </if>
+		  <if test="channelRange != null" > #{channelRange}, </if>
+		  <if test="createDate != null" > #{createDate}, </if>
+		  <if test="createdBy != null" > #{createdBy}, </if>
+		  <if test="updateDate != null" > null, </if>
+        </trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.po.HttAppVersion">
+		update 
+			htt_app_version 
+		<set>
+			<if test="configName != null"> configName = #{configName}, </if>
+			<if test="configData != null"> configData = #{configData}, </if>
+			<if test="sourceData != null"> sourceData = #{sourceData}, </if>
+			<if test="channelRange != null"> channelRange = #{channelRange}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+		</set>
+		where id = #{id} 
+	</update>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from htt_app_version
+		where id = #{id}
+	</delete>
+	
+</mapper>

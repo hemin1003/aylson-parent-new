@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttAppUser">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttAppUserVo">
+		<id column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="userPwd" property="userPwd" jdbcType="VARCHAR" />
+		<result column="gold" property="gold" jdbcType="VARCHAR" />
+		<result column="balance" property="balance" jdbcType="VARCHAR" />
+		<result column="userName" property="userName" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="wechat" property="wechat" jdbcType="VARCHAR" />
+		<result column="qq" property="qq" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="registerDate" property="registerDate" jdbcType="VARCHAR" />
+		<result column="lastLoginDate" property="lastLoginDate" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="blackList" property="blackList" jdbcType="INTEGER" />
+		<result column="shareCount" property="shareCount" jdbcType="INTEGER" />
+		<result column="firstShare" property="firstShare" jdbcType="INTEGER" />
+		<result column="firstInvite" property="firstInvite" jdbcType="INTEGER" />
+		<result column="firstRead" property="firstRead" jdbcType="INTEGER" />
+		<result column="students" property="students" jdbcType="INTEGER" />
+		<result column="dailyCheckIn" property="dailyCheckIn" jdbcType="INTEGER" />
+		
+		<result column="continueCheckIn" property="continueCheckIn" jdbcType="INTEGER" />
+		<result column="inviteCode" property="inviteCode" jdbcType="VARCHAR" />
+		<result column="isMaster" property="isMaster" jdbcType="INTEGER" />
+		<result column="isMasterFinished" property="isMasterFinished" jdbcType="INTEGER" />
+		<result column="isInviteStep" property="isInviteStep" jdbcType="INTEGER" />
+		<result column="accountStatus" property="accountStatus" jdbcType="INTEGER" />
+		
+		<result column="isBindWechat" property="isBindWechat" jdbcType="INTEGER" />
+		<result column="isBindPhoneNum" property="isBindPhoneNum" jdbcType="INTEGER" />
+		<result column="isBindAlipay" property="isBindAlipay" jdbcType="INTEGER" />
+		<result column="isBindTelPhoneNum" property="isBindTelPhoneNum" jdbcType="INTEGER" />
+		<result column="realPhoneNum" property="realPhoneNum" jdbcType="VARCHAR" />
+		<result column="isDaka" property="isDaka" jdbcType="INTEGER" />
+		<result column="registerIp" property="registerIp" jdbcType="VARCHAR" />
+		
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="msgCode" property="msgCode" jdbcType="VARCHAR" />
+		<result column="channel" property="channel" jdbcType="VARCHAR" />
+		
+		<result column="totalGold" property="totalGold" jdbcType="VARCHAR" />
+		<result column="studentsGold" property="studentsGold" jdbcType="VARCHAR" />
+		
+		<result column="blackRuleDesc" property="blackRuleDesc" jdbcType="VARCHAR" />
+		<result column="versionCode" property="versionCode" jdbcType="VARCHAR" />
+		
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_app_user.phoneNum,
+		htt_app_user.userPwd,
+		htt_app_user.gold, 
+		htt_app_user.balance,
+		htt_app_user.userName,
+		htt_app_user.address,
+		htt_app_user.wechat,
+		htt_app_user.qq,
+		htt_app_user.email,
+		htt_app_user.registerDate,
+		htt_app_user.lastLoginDate,
+		htt_app_user.updateDate,
+		htt_app_user.blackList,
+		htt_app_user.shareCount,
+		htt_app_user.firstShare,
+		htt_app_user.firstInvite,
+		htt_app_user.firstRead,
+		htt_app_user.students,
+		htt_app_user.dailyCheckIn,
+		htt_app_user.continueCheckIn,
+		htt_app_user.inviteCode,
+		htt_app_user.isMaster,
+		htt_app_user.isMasterFinished,
+		htt_app_user.isInviteStep,
+		htt_app_user.accountStatus,
+		htt_app_user.isBindWechat,
+		htt_app_user.isBindPhoneNum,
+		htt_app_user.isBindAlipay,
+		htt_app_user.isBindTelPhoneNum,
+		htt_app_user.realPhoneNum,
+		htt_app_user.isDaka,
+		htt_app_user.registerIp,
+		htt_app_user.imei,
+		htt_app_user.msgCode,
+		htt_app_user.channel,
+		htt_app_user.totalGold,
+		htt_app_user.studentsGold,
+		htt_app_user.blackRuleDesc,
+		htt_app_user.versionCode
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<if test="isDaka != null">and htt_app_user.isDaka = #{isDaka}</if>
+				<if test="inviteCode != null and inviteCode != ''">and htt_app_user.inviteCode = #{inviteCode}</if>
+				<if test="phoneNumLike != null and phoneNumLike != ''"> and htt_app_user.phoneNum = #{phoneNumLike}</if>
+				<if test="realPhoneNum != null and realPhoneNum != ''"> and htt_app_user.realPhoneNum = #{realPhoneNum}</if>
+			    <if test="userNameLike != null and userNameLike != ''">and htt_app_user.userName like CONCAT('%',#{userNameLike},'%')</if>
+			    
+			    <if test="students != null and students !=''">
+			    <![CDATA[
+			    and htt_app_user.students >= #{students}
+			    ]]> 
+			    </if>
+			    <if test="unUseDay != null and unUseDay !=''">
+			    <![CDATA[
+			    and htt_app_user.updateDate <= #{unUseDate}
+			    ]]> 
+			    </if>
+			    <if test="isBindRealPhone == 1">
+			    and htt_app_user.realPhoneNum is not null and htt_app_user.blackList = 0
+			    </if>
+			     <if test="gold != null and gold != ''">
+			     and cast(`gold` as signed integer) >= #{gold}
+			     </if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(phoneNum) from htt_app_user
+		<include refid="Where_Condition" />
+	</select>
+	
+	 <select id="selectIsInviteCodeExist" resultType="java.lang.Long">
+		select count(*) from htt_app_user where inviteCode=#{inviteCode}
+    </select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_user
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_app_user.registerDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_user
+		where phoneNum = #{phoneNum}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.vo.HttAppUserVo">
+		insert into htt_app_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="phoneNum != null" > phoneNum, </if>
+		  <if test="userPwd != null" > userPwd, </if>
+		  <if test="gold != null" > gold, </if>
+		  <if test="balance != null" > balance, </if>
+		  <if test="realPhoneNum != null" > realPhoneNum, </if>
+		  <if test="isDaka != null" > isDaka, </if>
+		  <if test="registerDate != null" > registerDate, </if>
+		  <if test="lastLoginDate != null" > lastLoginDate, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		  <if test="isBindPhoneNum != null" > isBindPhoneNum, </if>
+		  <if test="inviteCode != null" > inviteCode, </if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="phoneNum != null" > #{phoneNum}, </if>
+		  <if test="userPwd != null" > #{userPwd}, </if>
+		  <if test="gold != null" > #{gold}, </if>
+		  <if test="balance != null" > #{balance}, </if>
+		  <if test="realPhoneNum != null" > #{realPhoneNum}, </if>
+		  <if test="isDaka != null" > #{isDaka}, </if>
+		  <if test="registerDate != null" > #{registerDate}, </if>
+		  <if test="lastLoginDate != null" > null, </if>
+		  <if test="updateDate != null" > null, </if>
+		  <if test="isBindPhoneNum != null" > #{isBindPhoneNum}, </if>
+		  <if test="inviteCode != null" > #{inviteCode}, </if>
+        </trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.HttAppUserVo">
+		update 
+			htt_app_user 
+		<set>
+			<if test="isDaka != null"> isDaka = #{isDaka}, </if>
+			<if test="blackList != null"> blackList = #{blackList}, </if>
+			<if test="isBindWechat != null"> isBindWechat = #{isBindWechat}, </if>
+			<if test="gold != null"> gold = #{gold}, </if>
+			<if test="totalGold != null"> totalGold = #{totalGold}, </if>
+			<if test="studentsGold != null"> studentsGold = #{studentsGold}, </if>
+			<if test="accountStatus != null"> accountStatus = #{accountStatus}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+		</set>
+		where phoneNum = #{phoneNum}
+	</update>
+	
+	<!-- 根据ID数组查询 -->
+	<select id="httAppUserSelectByIdList" resultMap="ResultMap" parameterType="java.util.List">
+	    select
+		<include refid="DB_Column_List" />
+		from htt_app_user
+		where phoneNum in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		    #{item}
+		</foreach>
+	</select>
+	
+	<!-- 批量更新 -->
+	<update id="batchUpdate"  parameterType="java.util.List">
+          <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update 
+				htt_app_user 
+			<set>
+				<if test="item.isDaka != null"> isDaka = #{item.isDaka}, </if>
+				<if test="item.blackList != null"> blackList = #{item.blackList}, </if>
+				<if test="item.accountStatus != null"> accountStatus = #{item.accountStatus}, </if>
+				<if test="item.updateDate != null"> updateDate = #{item.updateDate}, </if>
+			</set> 
+			 where phoneNum = #{item.phoneNum} 
+         </foreach>
+    </update>
+    
+    <!-- 短信拉活-选择全部用户的手机号码 -->
+    <select id="selectAllRealPhoneNum" resultType="java.lang.String">
+       select realPhoneNum from htt_app_user WHERE htt_app_user.realPhoneNum is not null and htt_app_user.blackList = 0 
+    </select>
+	
+</mapper>

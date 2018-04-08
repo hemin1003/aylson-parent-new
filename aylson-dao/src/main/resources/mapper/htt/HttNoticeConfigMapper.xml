@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttNoticeConfig">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttNoticeConfigVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="action" property="action" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="INTEGER" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="titleMapUrl" property="titleMapUrl" jdbcType="VARCHAR" />
+		<result column="buttonCopywriting" property="buttonCopywriting" jdbcType="VARCHAR" />
+        <result column="notificationType" property="notificationType" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="tag" property="tag" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_notice_config.id,
+		htt_notice_config.title,
+		htt_notice_config.description,
+		htt_notice_config.action,
+		htt_notice_config.createDate,
+		htt_notice_config.createdBy,
+		htt_notice_config.updateDate,
+		htt_notice_config.updatedBy,
+		htt_notice_config.titleMapUrl,
+		htt_notice_config.buttonCopywriting,
+		htt_notice_config.notificationType,
+		htt_notice_config.status,
+		htt_notice_config.tag
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<!-- 模糊查询 -->
+				<if test="titleLike != null and titleLike != ''"> and htt_notice_config.title like CONCAT('%',#{titleLike},'%') </if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_notice_config
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_notice_config
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_notice_config.createDate desc </if>
+		<if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+		</if>
+	</select>
+
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_notice_config
+		where id = #{id}
+	</select>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.vo.HttNoticeConfigVo">
+		insert into htt_notice_config
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> id, </if>
+			<if test="title != null"> title, </if>
+			<if test="description != null"> description, </if>
+			<if test="action != null"> action, </if>
+			<if test="buttonCopywriting != null"> buttonCopywriting, </if>
+			<if test="titleMapUrl != null"> titleMapUrl, </if>
+			<if test="notificationType != null"> notificationType, </if>
+			<if test="tag != null"> tag, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null"> #{id}, </if>
+			<if test="title != null"> #{title}, </if>
+			<if test="description != null"> #{description}, </if>
+			<if test="action != null"> #{action}, </if>
+			<if test="buttonCopywriting != null"> #{buttonCopywriting}, </if>
+			<if test="titleMapUrl != null"> #{titleMapUrl}, </if>
+			<if test="notificationType != null"> #{notificationType}, </if>
+			<if test="tag != null"> #{tag}, </if>
+		</trim>
+	</insert>
+
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.HttNoticeConfigVo">
+		update
+		htt_notice_config
+		<set>
+			<if test="title != null"> title = #{title}, </if>
+			<if test="description != null"> description = #{description}, </if>
+			<if test="action != null"> action = #{action}, </if>
+			<if test="createDate != null"> createDate = #{createDate}, </if>
+			<if test="createdBy != null"> createdBy = #{createdBy}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+			<if test="buttonCopywriting != null"> buttonCopywriting = #{buttonCopywriting}, </if>
+			<if test="titleMapUrl != null"> titleMapUrl = #{titleMapUrl}, </if>
+			<if test="notificationType != null"> notificationType = #{notificationType}, </if>
+			<if test="status != null"> status = #{status}, </if>
+			<if test="tag != null"> tag = #{tag}, </if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from
+		htt_notice_config
+		where id = #{id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttLoginnewInstalledHis">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttLoginnewInstalledHisVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="installedList" property="installedList" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_loginnew_installed_his.id,
+		htt_loginnew_installed_his.pid,
+		htt_loginnew_installed_his.installedList,
+		htt_loginnew_installed_his.createDate,
+		htt_loginnew_installed_his.updateDate
+	</sql>
+
+	<!-- 根据PID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_loginnew_installed_his
+		where pid = #{pid}
+	</select>
+
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttBlacklistHis">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttBlacklistHisVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="strategy" property="strategy" jdbcType="VARCHAR" />
+		<result column="accountStatus" property="accountStatus" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_blacklist_his.id,
+		htt_blacklist_his.phoneNum,
+		htt_blacklist_his.source,
+		htt_blacklist_his.strategy,
+		htt_blacklist_his.accountStatus,
+		htt_blacklist_his.createDate,
+		htt_blacklist_his.createdBy,
+		htt_blacklist_his.updateDate,
+		htt_blacklist_his.updatedBy
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<if test="phoneNum != null and phoneNum != ''">and htt_blacklist_his.phoneNum = #{phoneNum}</if>
+			    <if test="source != null and source != ''">and htt_blacklist_his.source = #{source}</if>
+			    <if test="accountStatus != null and accountStatus != ''">and htt_blacklist_his.accountStatus = #{accountStatus}</if>
+			    <if test="createDate != null and createDate != ''">
+			    		 <![CDATA[
+			    			and createDate>=#{createDate} and createDate<#{tomorrowDate}
+			    		]]>  
+			    </if>
+			</trim>
+		</where>
+	</sql>
+
+    <!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_blacklist_his
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_blacklist_his
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_blacklist_his.createDate desc </if>
+		<if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+		</if>
+	</select>
+	
+	<!-- 批量插入 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			insert into htt_blacklist_his
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="item.id != null"> id, </if>
+				<if test="item.phoneNum != null"> phoneNum, </if>
+				<if test="item.source != null"> source, </if>
+				<if test="item.strategy != null"> strategy, </if>
+				<if test="item.accountStatus != null"> accountStatus, </if>
+				<if test="item.createDate != null"> createDate, </if>
+				<if test="item.updateDate != null"> updateDate, </if>
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="item.id != null"> #{item.id}, </if>
+				<if test="item.phoneNum != null"> #{item.phoneNum}, </if>
+				<if test="item.source != null"> #{item.source}, </if>
+				<if test="item.strategy != null"> #{item.strategy}, </if>
+				<if test="item.accountStatus != null"> #{item.accountStatus}, </if>
+				<if test="item.createDate != null"> #{item.createDate}, </if>
+				<if test="item.updateDate != null"> null, </if>
+			</trim>
+		</foreach>
+	</insert>
+
+</mapper>

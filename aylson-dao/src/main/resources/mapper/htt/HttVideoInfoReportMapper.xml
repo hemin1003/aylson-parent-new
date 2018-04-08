@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttVideoInfoReport">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttVideoInfoReportVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="satisticDate" property="satisticDate" jdbcType="VARCHAR" />
+		<result column="activeUserNum" property="activeUserNum" jdbcType="VARCHAR" />
+		<result column="videoUserNum" property="videoUserNum" jdbcType="VARCHAR" />
+		<result column="videoRate" property="videoRate" jdbcType="VARCHAR" />
+		<result column="totalVideoNum" property="totalVideoNum" jdbcType="VARCHAR" />
+		<result column="avgVideoNum" property="avgVideoNum" jdbcType="VARCHAR" />
+		<result column="totalVideoGold" property="totalVideoGold" jdbcType="VARCHAR" />
+		<result column="avgVideoGold" property="avgVideoGold" jdbcType="VARCHAR" />
+		<result column="avgVideoGoldTimes" property="avgVideoGoldTimes" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_video_Info_report.id,
+		htt_video_Info_report.satisticDate,
+		htt_video_Info_report.activeUserNum,
+		htt_video_Info_report.videoUserNum,
+		htt_video_Info_report.videoRate,
+		htt_video_Info_report.totalVideoNum,
+		htt_video_Info_report.avgVideoNum,
+		htt_video_Info_report.totalVideoGold,
+		htt_video_Info_report.avgVideoGold,
+		htt_video_Info_report.avgVideoGoldTimes,
+		htt_video_Info_report.createDate,
+		htt_video_Info_report.createdBy,
+		htt_video_Info_report.updateDate,
+		htt_video_Info_report.updatedBy
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<!-- 匹配查询 -->
+				<if test="isDateSearch == 1"> 
+				and htt_video_Info_report.satisticDate = #{date}
+				</if>
+				<if test="isDateSearch == 0"> 
+				<![CDATA[
+				and htt_video_Info_report.satisticDate <= #{date} and htt_video_Info_report.satisticDate >= #{sevenDayAgo}
+				 ]]> 
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+    <!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_video_Info_report
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_video_Info_report
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_video_Info_report.createDate desc </if>
+		<if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+		</if>
+	</select>
+
+</mapper>

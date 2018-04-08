@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttTraceHis">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttTraceHisVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="traceId" property="traceId" jdbcType="VARCHAR" />
+		<result column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="apiName" property="apiName" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="isUsed" property="isUsed" jdbcType="INTEGER" />
+		<result column="uId" property="uId" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_trace_his.id,
+		htt_trace_his.traceId,
+		htt_trace_his.phoneNum,
+		htt_trace_his.imei,
+		htt_trace_his.ip,
+		htt_trace_his.apiName,
+		htt_trace_his.createDate,
+		htt_trace_his.createdBy,
+		htt_trace_his.updateDate,
+		htt_trace_his.updatedBy,
+		htt_trace_his.isUsed,
+		htt_trace_his.uId,
+		htt_trace_his.source
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 精确查询 -->
+				<if test="phoneNum != null and phoneNum != ''"> and htt_trace_his.phoneNum = #{phoneNum} </if>
+				<if test="traceId != null and traceId != ''"> and htt_trace_his.traceId = #{traceId} </if>
+				<if test="source != null and source != ''"> and htt_trace_his.source = #{source} </if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_trace_his
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_trace_his
+		<include refid="Where_Condition" />
+		<!-- <if test="sort == null">order by htt_trace_his.createDate desc </if> -->
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_trace_his
+		where id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.vo.HttTraceHisVo">
+		insert into htt_trace_his
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > id, </if>
+		  <if test="masterPhoneNum != null" > masterPhoneNum, </if>
+		  <if test="studentPhoneNum != null" > studentPhoneNum, </if>
+		  <if test="createDate != null" > createDate, </if>
+		  <if test="createdBy != null" > createdBy, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > #{id}, </if>
+		  <if test="masterPhoneNum != null" > #{masterPhoneNum}, </if>
+		  <if test="studentPhoneNum != null" > #{studentPhoneNum}, </if>
+		  <if test="createDate != null" > #{createDate}, </if>
+		  <if test="createdBy != null" > #{createdBy}, </if>
+		  <if test="updateDate != null" > null, </if>
+        </trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.HttInviteUserHisVo">
+		update 
+			htt_inviteuser_his 
+		<set>
+			<if test="masterPhoneNum != null"> masterPhoneNum = #{masterPhoneNum}, </if>
+			<if test="studentPhoneNum != null"> studentPhoneNum = #{studentPhoneNum}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+		</set>
+		where id = #{id} 
+	</update>
+	
+	<!-- 根据ID删除 -->
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from htt_inviteuser_his
+		where id = #{id}
+	</delete>
+	
+</mapper>

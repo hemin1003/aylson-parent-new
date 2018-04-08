@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.ExpenseInfo">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.ExpenseInfoVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="date" property="date" jdbcType="VARCHAR" />
+		<result column="scolumn" property="scolumn" jdbcType="VARCHAR" />
+		<result column="sname" property="sname" jdbcType="VARCHAR" />
+		<result column="nums" property="nums" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_expense_info.id,
+		htt_expense_info.date,
+		htt_expense_info.scolumn, 
+		htt_expense_info.sname, 
+		htt_expense_info.nums, 
+		htt_expense_info.createDate,
+		htt_expense_info.createdBy,
+		htt_expense_info.updateDate,
+		htt_expense_info.updatedBy
+	</sql>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_expense_info where date=#{currentTime}
+	</select>
+	
+	<select id="selectNumsOfTag" resultMap="ResultMap" parameterType="java.util.Map">
+		select * from htt_expense_info where scolumn=#{scolumn} order by date desc limit #{limit}
+	</select>
+	
+</mapper>

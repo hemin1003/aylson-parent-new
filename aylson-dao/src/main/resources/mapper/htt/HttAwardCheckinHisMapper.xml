@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttAwardCheckinHis">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttAwardCheckinHisVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="awardType" property="awardType" jdbcType="INTEGER" />
+		<result column="awardName" property="awardName" jdbcType="VARCHAR" />
+		<result column="gold" property="gold" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="studentPhoneNum" property="studentPhoneNum" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_award_checkin_his.id,
+		htt_award_checkin_his.phoneNum,
+		htt_award_checkin_his.awardType, 
+		htt_award_checkin_his.awardName,
+		htt_award_checkin_his.gold,
+		htt_award_checkin_his.createDate,
+		htt_award_checkin_his.createdBy,
+		htt_award_checkin_his.updateDate,
+		htt_award_checkin_his.updatedBy,
+		htt_award_checkin_his.studentPhoneNum
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<if test="phoneNumLike != null and phoneNumLike != ''"> and htt_award_checkin_his.phoneNum = #{phoneNumLike} </if>
+			    <if test="awardType != null">and htt_award_checkin_his.awardType = #{awardType}</if>
+			    <if test="createDate != null and createDate != ''">
+			    		 <![CDATA[
+			    			and createDate>=#{createDate} and createDate<#{tomorrowDate}
+			    		]]>  
+			    </if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_award_checkin_his
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_award_checkin_his
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_award_checkin_his.createDate desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_award_checkin_his
+		where id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.vo.HttAwardCheckinHisVo">
+		insert into htt_award_checkin_his
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > id, </if>
+		  <if test="phoneNum != null" > phoneNum, </if>
+		  <if test="awardType != null" > awardType, </if>
+		  <if test="awardName != null" > awardName, </if>
+		  <if test="gold != null" > gold, </if>
+		  <if test="createDate != null" > createDate, </if>
+		  <if test="createdBy != null" > createdBy, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		  <if test="studentPhoneNum != null" > studentPhoneNum, </if>
+		  
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > #{id}, </if>
+		  <if test="phoneNum != null" > #{phoneNum}, </if>
+		  <if test="awardType != null" > #{awardType}, </if>
+		  <if test="awardName != null" > #{awardName}, </if>
+		  <if test="gold != null" > #{gold}, </if>
+		  <if test="createDate != null" > #{createDate}, </if>
+		  <if test="createdBy != null" > #{createdBy}, </if>
+		  <if test="updateDate != null" > null, </if>
+		  <if test="studentPhoneNum != null" > #{studentPhoneNum}, </if>
+		  
+        </trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.HttAwardCheckinHisVo">
+		update 
+			htt_award_checkin_his 
+		<set>
+			<if test="phoneNum != null"> phoneNum = #{phoneNum}, </if>
+			<if test="awardType != null"> awardType = #{awardType}, </if>
+			<if test="awardName != null"> awardName = #{awardName}, </if>
+			<if test="gold != null"> gold = #{gold}, </if>
+			<if test="studentPhoneNum != null"> studentPhoneNum = #{studentPhoneNum}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+		</set>
+		where id = #{id} 
+	</update>
+	
+</mapper>

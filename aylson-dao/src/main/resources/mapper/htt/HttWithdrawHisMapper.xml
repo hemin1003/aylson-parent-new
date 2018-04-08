@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttWithdrawHis">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttWithdrawHisVo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="phoneNum" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="withdrawType" property="withdrawType" jdbcType="INTEGER" />
+		<result column="withdrawName" property="withdrawName" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="account" property="account" jdbcType="VARCHAR" />
+		<result column="gold" property="gold" jdbcType="VARCHAR" />
+		<result column="income" property="income" jdbcType="VARCHAR" />
+		<result column="withdrawTime" property="withdrawTime" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="statusType" property="statusType" jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+		<result column="createdBy" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updatedBy" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="sysUserId" property="sysUserId" jdbcType="VARCHAR" />
+		<result column="ownPhoneNum" property="ownPhoneNum" jdbcType="VARCHAR" />
+		<result column="failMsg" property="failMsg" jdbcType="VARCHAR" />
+		
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_withdraw_his.id,
+		htt_withdraw_his.phoneNum,
+		htt_withdraw_his.withdrawType, 
+		htt_withdraw_his.withdrawName,
+		htt_withdraw_his.name,
+		htt_withdraw_his.account,
+		htt_withdraw_his.gold,
+		htt_withdraw_his.income,
+		htt_withdraw_his.withdrawTime,
+		htt_withdraw_his.status,
+		htt_withdraw_his.statusType,
+		htt_withdraw_his.createDate,
+		htt_withdraw_his.updateDate,
+		htt_withdraw_his.createdBy,
+		htt_withdraw_his.updatedBy,
+		htt_withdraw_his.sysUserId,
+		htt_withdraw_his.ownPhoneNum,
+		htt_withdraw_his.failMsg
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				<!-- 匹配查询 -->
+				<if test="id != null and id != ''">and htt_withdraw_his.id = #{id}</if>
+				<if test="phoneNum != null and phoneNum != ''">and htt_withdraw_his.phoneNum = #{phoneNum}</if>
+				<if test="withdrawTime != null and withdrawTime != ''">and date_format(withdrawTime,'%Y-%m-%d')=#{withdrawTime}</if>
+				<if test="updateDate != null and updateDate != ''">and date_format(updateDate,'%Y-%m-%d')=#{updateDate}</if>
+				<if test="withdrawType != null">and htt_withdraw_his.withdrawType = #{withdrawType}</if>
+				<if test="statusType != null">and htt_withdraw_his.statusType = #{statusType}</if>
+				<if test="idsArray != null and idsArray != ''">and htt_withdraw_his.id in
+                    <foreach item="item" index="index" collection="idsArray"
+                             open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="sysUserId != null">and htt_withdraw_his.sysUserId = #{sysUserId}</if>
+				<!-- 模糊查询 -->
+				<if test="nameLike != null and nameLike != ''"> and htt_withdraw_his.name like CONCAT('%',#{nameLike},'%') </if>
+				<if test="accountLike != null and accountLike != ''"> and htt_withdraw_his.account like CONCAT('%',#{accountLike},'%') </if>
+				<if test="phoneNumLike != null and phoneNumLike != ''"> and (htt_withdraw_his.phoneNum like CONCAT('%',#{phoneNumLike},'%') or htt_withdraw_his.ownPhoneNum like CONCAT('%',#{phoneNumLike},'%')) </if>
+				<!-- 用户黑名单功能调整用，特殊处理，2018/01/19 -->
+				<if test="withdrawTimeBeyond != null and withdrawTimeBeyond != ''">and withdrawTime>=#{withdrawTimeBeyond}</if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_withdraw_his
+		<include refid="Where_Condition" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_his
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_withdraw_his.withdrawTime desc </if>
+        <if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+            	limit #{offset}, #{limit}
+        	</if>
+		</if>
+	</select>
+	
+	<!-- 根据ID数组查询 -->
+	<select id="httWithdrawHisSelectByIdList" resultMap="ResultMap" parameterType="java.util.List">
+	    select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_his
+		where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		    #{item}
+		</foreach>
+	</select>
+	
+	<!-- 根据phoneNum数组查询-只查处理中的提现记录 -->
+	<select id="httWithdrawHisSelectByPhoneNumList" resultMap="ResultMap" parameterType="java.util.List">
+	    select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_his
+		where statusType=1 and phoneNum in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		    #{item}
+		</foreach>
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_withdraw_his
+		where id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.aylson.dc.htt.po.HttWithdrawHis">
+		insert into htt_withdraw_his
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > id, </if>
+		  <if test="phoneNum != null" > phoneNum, </if>
+		  <if test="withdrawType != null" > withdrawType, </if>
+		  <if test="withdrawName != null" > withdrawName, </if>
+		  <if test="name != null" > name, </if>
+		  <if test="account != null" > account, </if>
+		  <if test="gold != null" > gold, </if>
+		  <if test="income != null" > income, </if>
+		  <if test="withdrawTime != null" > withdrawTime, </if>
+		  <if test="status != null" > status, </if>
+		  <if test="statusType != null" > statusType, </if>
+		  <if test="createDate != null" > createDate, </if>
+		  <if test="createdBy != null" > createdBy, </if>
+		  <if test="updateDate != null" > updateDate, </if>
+		  <if test="sysUserId != null" > sysUserId, </if>
+		  <if test="ownPhoneNum != null" > ownPhoneNum, </if>
+		  <if test="failMsg != null" > failMsg, </if>
+		  
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" > #{id}, </if>
+		  <if test="phoneNum != null" > #{phoneNum}, </if>
+		  <if test="withdrawType != null" > #{withdrawType}, </if>
+		  <if test="withdrawName != null" > #{withdrawName}, </if>
+		  <if test="name != null" > #{name}, </if>
+		  <if test="account != null" > #{account}, </if>
+		  <if test="gold != null" > #{gold}, </if>
+		  <if test="income != null" > #{income}, </if>
+		  <if test="withdrawTime != null" > #{withdrawTime}, </if>
+		  <if test="status != null" > #{status}, </if>
+		  <if test="statusType != null" > #{statusType}, </if>
+		  <if test="createDate != null" > #{createDate}, </if>
+		  <if test="createdBy != null" > #{createdBy}, </if>
+		  <if test="updateDate != null" > null, </if>
+		  <if test="sysUserId != null" > #{sysUserId}, </if>
+		  <if test="ownPhoneNum != null" > #{ownPhoneNum}, </if>
+		  <if test="failMsg != null" > #{failMsg}, </if>
+		  
+        </trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.po.HttWithdrawHis">
+		update 
+			htt_withdraw_his 
+		<set>
+			<if test="phoneNum != null"> phoneNum = #{phoneNum}, </if>
+			<if test="withdrawType != null"> withdrawType = #{withdrawType}, </if>
+			<if test="withdrawName != null"> withdrawName = #{withdrawName}, </if>
+			<if test="name != null"> name = #{name}, </if>
+			<if test="account != null"> account = #{account}, </if>
+			<if test="gold != null"> gold = #{gold}, </if>
+			<if test="income != null"> income = #{income}, </if>
+			<if test="withdrawTime != null"> withdrawTime = #{withdrawTime}, </if>
+			<if test="status != null"> status = #{status}, </if>
+			<if test="statusType != null"> statusType = #{statusType}, </if>
+			<if test="updatedBy != null"> updatedBy = #{updatedBy}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+			<if test="sysUserId != null"> sysUserId = #{sysUserId}, </if>
+			<if test="ownPhoneNum != null"> ownPhoneNum = #{ownPhoneNum}, </if>
+			<if test="failMsg != null"> failMsg = #{failMsg}, </if>
+			
+		</set>
+		where id = #{id} 
+	</update>
+		
+	<!-- 批量更新 -->
+	<update id="batchUpdate"  parameterType="java.util.List">
+          <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update 
+				htt_withdraw_his 
+			<set>
+				<if test="item.statusType != null"> statusType = #{item.statusType}, </if>
+				<if test="item.status != null"> status = #{item.status}, </if>
+				<if test="item.updateDate != null"> updateDate = #{item.updateDate}, </if>
+			</set> 
+			 where id = #{item.id} 
+         </foreach>
+    </update>
+    
+    <!-- 批量更新 传入phoneNum数组  -->
+	<update id="batchUpdateByPhoneNum"  parameterType="java.util.List">
+          <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update 
+				htt_withdraw_his 
+			<set>
+				<if test="item.statusType != null"> statusType = #{item.statusType}, </if>
+				<if test="item.status != null"> status = #{item.status}, </if>
+				<if test="item.updateDate != null"> updateDate = #{item.updateDate}, </if>
+			</set> 
+			 where id = #{item.id} and statusType=1
+         </foreach>
+    </update>
+</mapper>

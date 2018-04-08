@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylson.dc.htt.po.HttAppUsermulti">
+
+	<resultMap id="ResultMap" type="com.aylson.dc.htt.vo.HttAppUsermultiVo">
+		<id column="systemUserId" property="systemUserId" jdbcType="VARCHAR" />
+		<result column="wechatOpenId" property="wechatOpenId" jdbcType="VARCHAR" />
+		<result column="wechatNickname" property="wechatNickname" jdbcType="VARCHAR" />
+		<result column="wechatHeadImgurl" property="wechatHeadImgurl" jdbcType="VARCHAR" />
+		<result column="wechatUnionId" property="wechatUnionId" jdbcType="VARCHAR" />
+		<result column="wechatPwd" property="wechatPwd" jdbcType="VARCHAR" />
+		<result column="wechatName" property="wechatName" jdbcType="VARCHAR" />
+		<result column="wechatPhoneNum" property="wechatPhoneNum" jdbcType="VARCHAR" />
+		<result column="telPhoneNum" property="telPhoneNum" jdbcType="VARCHAR" />
+		<result column="alipayAccount" property="alipayAccount" jdbcType="VARCHAR" />
+		<result column="alipayName" property="alipayName" jdbcType="VARCHAR" />
+		<result column="ownPhoneNum" property="ownPhoneNum" jdbcType="VARCHAR" />
+		<result column="ownUserPwd" property="ownUserPwd" jdbcType="VARCHAR" />
+		<result column="createDate" property="createDate" jdbcType="VARCHAR" />
+		<result column="updateDate" property="updateDate" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="DB_Column_List">
+		htt_app_usermulti.systemUserId,
+		htt_app_usermulti.wechatOpenId,
+		htt_app_usermulti.wechatNickname,
+		htt_app_usermulti.wechatHeadImgurl,
+		htt_app_usermulti.wechatUnionId,
+		htt_app_usermulti.wechatPwd,
+		htt_app_usermulti.wechatName,
+		htt_app_usermulti.wechatPhoneNum,
+		htt_app_usermulti.telPhoneNum,
+		htt_app_usermulti.alipayAccount,
+		htt_app_usermulti.alipayName,
+		htt_app_usermulti.ownPhoneNum,
+		htt_app_usermulti.ownUserPwd,
+		htt_app_usermulti.createDate,
+		htt_app_usermulti.updateDate
+	</sql>
+
+	<sql id="Where_Condition">
+		<where>
+			<trim prefixOverrides="and">
+				
+			</trim>
+		</where>
+	</sql>
+
+    <!-- 查询总数 -->
+	<select id="selectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(id) from htt_app_usermulti
+		<include refid="Where_Condition" />
+	</select>
+	
+	<!-- 根据ID查询 -->
+	<select id="selectById" resultMap="ResultMap" parameterType="java.lang.String">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_usermulti
+		where systemUserId = #{systemUserId}
+	</select>
+
+	<!-- 查询 -->
+	<select id="select" resultMap="ResultMap" parameterType="java.util.Map">
+		select
+		<include refid="DB_Column_List" />
+		from htt_app_usermulti
+		<include refid="Where_Condition" />
+		<if test="sort == null">order by htt_app_usermulti.createDate desc </if>
+		<if test="sort != null">order by ${sort} ${order}</if>
+		<if test="isPage == true">
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+		</if>
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updateById" parameterType="com.aylson.dc.htt.vo.HttAppUsermultiVo">
+		update 
+			htt_app_usermulti 
+		<set>
+			<if test="wechatOpenId != null"> wechatOpenId = #{wechatOpenId}, </if>
+			<if test="updateDate != null"> updateDate = #{updateDate}, </if>
+		</set>
+		where systemUserId = #{systemUserId}
+	</update>
+
+</mapper>
