@@ -12,7 +12,7 @@
 
 基于[JAVA爬虫框架实战](https://github.com/hemin1003/java-spider)实现
 
-![image](./aylson-manage/src/main/webapp/resources/images/WX20171115-170301.png)
+![image](../aylson-manage/src/main/webapp/resources/images/WX20171115-170301.png)
 
 # 配套的前端API实现项目实战
 
