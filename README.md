@@ -21,7 +21,7 @@
 
 体验系统地址：http://wuyangshiye.cn:8280/manage/login.jsp
 
-体验账号/密码，test1001/a12345678
+体验账号/密码，tmp1001/a123456
 
 ## 新增爬虫项目统计信息
 
