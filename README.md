@@ -14,7 +14,9 @@
 4. 进入项目目录aylson-manage，运行mvn jetty:run命令即可启动项目（默认访问地址：http://localhost:8080/manage/login.jsp）
 （也可导入开发工具，然后进行相关jetty配置）
 
-注意：由于默认mysql导入文件大小有限制4m，而.sql导入文件很大，两种解决方式：
+## 注意事项说明：
+
+由于默认mysql导入文件大小有限制4m，而.sql导入文件很大，两种解决方式：
 1. 修改mysql配置文件，调大导入文件限制（网上自查），使用show VARIABLES like '%max_allowed_packet%'，可查看默认最大大小（max_allowed_packet）
 2. 不使用导入方式，而是直接复制.sql文件内容，然后粘贴到navicat工具查询中执行即可
 3. 复制.sql内容时请注意：不要使用开发工具打开.sql文件，因为文件太大，文件内容显示不全，可使用editplus或者记事本工具打开即可
